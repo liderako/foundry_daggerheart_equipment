@@ -1,0 +1,60 @@
+<section class='tab {{tabs.inventory.cssClass}} {{tabs.inventory.id}}' data-tab='{{tabs.inventory.id}}'
+    data-group='{{tabs.inventory.group}}'>
+    {{#if equipment.searchable}}
+    <div class="search-section">
+        <div class="search-bar">
+            <div class="icon">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+            <input type="search" name="search" class="search-inventory" placeholder="{{localize "DAGGERHEART.GENERAL.searchPlaceholder"}}">
+        </div>
+        <a class="filter-button">
+            <i class="fa-solid fa-filter"></i>
+        </a>
+        {{#if equipment.storage}}
+        <a data-tooltip="{{localize 'DAGGERHEART.UI.Tooltip.compendiumBrowser'}}" data-action="tempBrowser">
+            <i class="fa-solid fa-book-atlas"></i>
+        </a>
+        {{/if}}
+    </div>
+    {{/if}}
+
+    {{#if inventory.hasCurrency}}
+        {{> "systems/daggerheart/templates/sheets/global/partials/gold.hbs" currencies=inventory.currencies}}
+    {{/if}}
+
+    <div class="items-section mist-equipment">
+        {{#if equipment.canWear}}
+        <fieldset class="glassy drop-section mist-equip-section mist-equip-worn" data-mist-section="worn">
+            <legend><i class="fa-solid fa-shirt" inert></i> {{localize "MIST_EQUIP.Worn"}}</legend>
+            {{#if equipment.worn.length}}
+                {{> "mist-equipment.list" items=equipment.worn}}
+            {{else}}
+                <p class="hint">{{localize "MIST_EQUIP.WornEmpty"}}</p>
+            {{/if}}
+        </fieldset>
+        {{/if}}
+
+        <fieldset class="glassy drop-section mist-equip-section mist-equip-loose" data-mist-section="loose">
+            <legend>
+                <i class="fa-solid fa-hand" inert></i> {{localize "MIST_EQUIP.AtHand"}}
+                {{#if @root.editable}}
+                {{#each equipment.createTypes as |type|}}
+                <a data-action="addNewItem" data-document-class="Item" data-type="{{type}}" data-tooltip="{{localize 'DOCUMENT.Create' type=(localize (concat 'TYPES.Item.' type))}}">
+                    <i class="fa-solid fa-plus icon-button" inert></i> <span class="mist-equip-create">{{localize (concat 'TYPES.Item.' type)}}</span>
+                </a>
+                {{/each}}
+                {{/if}}
+            </legend>
+            {{#if equipment.looseCount}}
+                {{> "mist-equipment.categories" categories=equipment.loose}}
+            {{else}}
+                <p class="hint">{{localize "MIST_EQUIP.AtHandEmpty"}}</p>
+            {{/if}}
+        </fieldset>
+
+        {{#each equipment.containers as |container|}}
+            {{> "mist-equipment.container" container}}
+        {{/each}}
+    </div>
+</section>

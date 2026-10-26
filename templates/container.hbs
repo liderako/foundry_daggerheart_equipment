@@ -1,0 +1,17 @@
+{{!-- A container with its items by category, and the containers inside it drawn the same way. --}}
+<fieldset class="glassy drop-section mist-equip-section mist-equip-container" data-mist-section="container" data-container-id="{{id}}">
+    <legend>
+        <img src="{{img}}" alt="">
+        {{name}}
+        {{#if worn}}<i class="fa-solid fa-shirt" data-tooltip="MIST_EQUIP.WornTag" inert></i>{{/if}}
+        {{#if load}}<span class="mist-equip-load">{{localize "MIST_EQUIP.Slots" slots=load}}</span>{{/if}}
+    </legend>
+    {{#if count}}
+        {{> "mist-equipment.categories" categories=categories}}
+    {{else}}
+        <p class="hint">{{localize "MIST_EQUIP.ContainerEmpty"}}</p>
+    {{/if}}
+    {{#each containers as |child|}}
+        {{> "mist-equipment.container" child}}
+    {{/each}}
+</fieldset>

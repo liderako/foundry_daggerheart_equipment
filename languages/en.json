@@ -1,0 +1,32 @@
+{
+	"MIST_EQUIP": {
+		"Worn": "Worn",
+		"WornEmpty": "Nothing worn. Equip weapons and armor, put on clothing and a backpack, or drag wearable things here.",
+		"WornTag": "Worn",
+		"AtHand": "At hand",
+		"AtHandEmpty": "Nothing at hand. Drag items here to take them out of a container.",
+		"ContainerEmpty": "Empty. Drag items here to put them inside.",
+		"Slots": "{slots} slots",
+		"CannotHold": "A container cannot go inside itself or into what it holds.",
+		"Wearable": "Wearable",
+		"WearableHint": "Put on like armor (clothing, a backpack): its row gets a wear button, and it can be dragged onto Worn. Worn, it takes no slots; its capacity bonus counts only while it is worn.",
+		"Container": "Container",
+		"ContainerHint": "Holds other items (a backpack, a bag): the inventory gets a section for it, and items dragged onto it go inside.",
+		"PutOn": "Put on",
+		"TakeOff": "Take off",
+		"Contents": "Contents ({count})",
+		"ContentsEmpty": "Nothing inside.",
+		"UnpackFailed": "Could not take the items out of {name} on {actor}; they stay packed inside it. See the console (F12).",
+		"ArmorSlotsHint": "Armor slots marked: {used} of {max}. They stay marked on the armor when it is taken off or passed on.",
+		"ArmorSlotsUsed": "Marked slots:",
+		"Durability": "Durability",
+		"DurabilityEnable": "Has durability",
+		"DurabilityEnableHint": "Switches durability on for this item; it starts full. Players see it, and the owner can lower and raise it here.",
+		"DurabilityMax": "Maximum",
+		"DurabilityDecrease": "Lower durability by 1",
+		"DurabilityIncrease": "Raise durability by 1",
+		"DurabilityHint": "Durability {value} of {max}",
+		"Broken": "Broken",
+		"BrokenHint": "Broken: durability 0 of {max}. It still works; the GM decides what that means."
+	}
+}

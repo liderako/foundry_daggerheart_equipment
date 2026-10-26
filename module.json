@@ -1,0 +1,51 @@
+{
+	"id": "mist-age-equipment",
+	"title": "The Mist Age - Equipment",
+	"description": "Daggerheart inventory laid out the way it is carried: what a character wears on top, what is at hand, and containers such as a backpack with their contents by category, nested inside one another. Clothing and backpacks are put on like armor; their capacity bonus counts only while worn.",
+	"version": "0.1.0",
+	"compatibility": {
+		"minimum": "13",
+		"verified": "14"
+	},
+	"authors": [
+		{
+			"name": "asvirido"
+		}
+	],
+	"relationships": {
+		"systems": [
+			{
+				"id": "daggerheart",
+				"type": "system"
+			}
+		],
+		"recommends": [
+			{
+				"id": "mist-age-toolkit",
+				"type": "module",
+				"reason": "Weight in slots and carrying capacity: worn items take no slots and containers show how full they are."
+			}
+		]
+	},
+	"esmodules": [
+		"scripts/main.js"
+	],
+	"styles": [
+		"styles/equipment.css"
+	],
+	"languages": [
+		{
+			"lang": "en",
+			"name": "English",
+			"path": "languages/en.json"
+		},
+		{
+			"lang": "ru",
+			"name": "Русский",
+			"path": "languages/ru.json"
+		}
+	],
+	"url": "",
+	"manifest": "",
+	"download": ""
+}

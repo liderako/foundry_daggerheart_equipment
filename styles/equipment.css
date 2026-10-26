@@ -1,0 +1,215 @@
+/* Sections of the inventory: worn, at hand, and containers nested inside one another. */
+.daggerheart .mist-equipment .mist-equip-section > legend {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.daggerheart .mist-equipment .mist-equip-section > legend img {
+	width: 20px;
+	height: 20px;
+	border: none;
+	object-fit: contain;
+}
+
+.daggerheart .mist-equipment .mist-equip-section > .hint {
+	margin: 4px 8px;
+	font-size: var(--font-size-12, 12px);
+	opacity: 0.7;
+}
+
+.daggerheart .mist-equipment .mist-equip-loose > legend a {
+	display: inline-flex;
+	align-items: center;
+	gap: 2px;
+	font-size: var(--font-size-11, 11px);
+	opacity: 0.8;
+}
+
+.daggerheart .mist-equipment .mist-equip-loose > legend a:hover {
+	opacity: 1;
+}
+
+.daggerheart .mist-equipment .mist-equip-load {
+	font-size: var(--font-size-11, 11px);
+	font-weight: normal;
+	opacity: 0.75;
+}
+
+/* Categories inside a section: each a band with a golden title, an item count and a line, like Daggerheart titles. */
+.daggerheart .mist-equipment .mist-equip-category {
+	margin: 4px 0 8px;
+	padding: 4px 0 2px;
+	border-radius: 6px;
+	background: light-dark(rgba(24, 22, 46, 0.05), rgba(243, 194, 103, 0.04));
+}
+
+.daggerheart .mist-equipment .mist-equip-category + .mist-equip-category {
+	margin-top: 10px;
+}
+
+.daggerheart .mist-equipment .mist-equip-category-title {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0 8px 4px;
+	color: light-dark(var(--dark-blue, #18162e), var(--golden, #f3c267));
+	font-family: var(--dh-font-title, "Cinzel Decorative"), serif;
+	font-size: var(--font-size-14, 14px);
+	font-weight: bold;
+	letter-spacing: 0.04em;
+}
+
+.daggerheart .mist-equipment .mist-equip-category-title > i {
+	width: 16px;
+	text-align: center;
+}
+
+.daggerheart .mist-equipment .mist-equip-category-title .count {
+	min-width: 20px;
+	padding: 0 6px;
+	border-radius: 10px;
+	background: light-dark(var(--dark-blue, #18162e), var(--golden, #f3c267));
+	color: light-dark(var(--beige, #efe6d8), var(--dark-blue, #18162e));
+	font-family: var(--dh-font-body, "Montserrat"), sans-serif;
+	font-size: var(--font-size-11, 11px);
+	text-align: center;
+	letter-spacing: 0;
+}
+
+.daggerheart .mist-equipment .mist-equip-category-title::after {
+	content: "";
+	flex: 1;
+	height: 1px;
+	background: linear-gradient(90deg, light-dark(var(--dark-blue, #18162e), var(--golden, #f3c267)) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+/* A container inside another is drawn inside its section, a little indented. */
+.daggerheart .mist-equipment .mist-equip-container .mist-equip-container {
+	margin: 8px 0 4px 12px;
+}
+
+/* Where a dragged item would go. */
+.daggerheart .mist-equipment .mist-equip-section.mist-equip-over {
+	outline: 1px dashed var(--color-warm-2, #e0b23a);
+	outline-offset: 2px;
+}
+
+/* The contents of a container on its own sheet. */
+.daggerheart .mist-equip-contents {
+	margin: 0 0 8px;
+}
+
+.daggerheart .mist-equip-contents > legend {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.daggerheart .mist-equip-tree {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.daggerheart .mist-equip-tree .mist-equip-tree {
+	margin-left: 14px;
+	padding-left: 8px;
+	border-left: 1px solid light-dark(rgba(24, 22, 46, 0.25), rgba(243, 194, 103, 0.3));
+}
+
+.daggerheart .mist-equip-entry {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 2px 0;
+}
+
+.daggerheart .mist-equip-entry img {
+	width: 24px;
+	height: 24px;
+	border: none;
+	border-radius: 3px;
+	object-fit: cover;
+}
+
+.daggerheart .mist-equip-entry .name {
+	flex: 1;
+}
+
+.daggerheart .mist-equip-entry .quantity {
+	opacity: 0.75;
+	font-size: var(--font-size-12, 12px);
+}
+
+/* Marked armor slots on every armor: filled shields for marked slots, outlines for free ones. */
+.daggerheart .mist-armor-slots {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.daggerheart .mist-armor-pips {
+	display: inline-flex;
+	gap: 1px;
+	font-size: var(--font-size-11, 11px);
+}
+
+.daggerheart .mist-armor-slots.marked .mist-armor-pips .fa-solid {
+	color: light-dark(var(--dark-blue, #18162e), var(--golden, #f3c267));
+}
+
+.daggerheart .mist-armor-count {
+	font-variant-numeric: tabular-nums;
+}
+
+.daggerheart .item-sheet-header .mist-armor-slots {
+	gap: 6px;
+}
+
+/* Durability: a hammer tag with value/max, red when broken; the controls on the item's settings tab. */
+.daggerheart .mist-durability {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.daggerheart .mist-durability.broken {
+	color: light-dark(#a8261b, #e5574a);
+	border-color: light-dark(#a8261b, #e5574a);
+	font-weight: bold;
+}
+
+.daggerheart li.inventory-item.mist-broken .item-name {
+	color: light-dark(#a8261b, #e5574a);
+}
+
+.daggerheart .mist-durability-settings {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.daggerheart .mist-durability-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.daggerheart .mist-durability-row input[type="number"] {
+	width: 70px;
+	text-align: center;
+}
+
+.daggerheart .mist-durability-value button {
+	flex: none;
+	width: 30px;
+}
+
+.daggerheart .mist-durability-value .value {
+	min-width: 56px;
+	text-align: center;
+	font-size: var(--font-size-16, 16px);
+	font-weight: bold;
+	font-variant-numeric: tabular-nums;
+}

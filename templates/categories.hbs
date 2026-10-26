@@ -1,0 +1,10 @@
+{{#each categories as |category|}}
+<div class="mist-equip-category" data-category="{{category.type}}">
+    <header class="mist-equip-category-title">
+        <i class="{{category.icon}}" inert></i>
+        <span class="label">{{localize (concat 'TYPES.Item.' category.type)}}</span>
+        <span class="count">{{category.items.length}}</span>
+    </header>
+    {{> "mist-equipment.list" items=category.items}}
+</div>
+{{/each}}

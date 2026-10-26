@@ -1,0 +1,14 @@
+{{!-- Items of any type, each drawn by the Daggerheart row with its own type, so its buttons and menus stay. --}}
+<ul class="items-list">
+    {{#each items as |item|}}
+    {{> 'daggerheart.inventory-item'
+    item=item
+    type=item.type
+    actorType=@root.document.type
+    isQuantifiable=(or @root.equipment.storage (eq item.type 'consumable') (eq item.type 'loot'))
+    showActions=(ifThen (eq item.type 'loot') @root.editable null)
+    hideContextMenu=@root.equipment.storage
+    hideResources=(and @root.equipment.storage (or (eq item.type 'weapon') (eq item.type 'armor')))
+    }}
+    {{/each}}
+</ul>
