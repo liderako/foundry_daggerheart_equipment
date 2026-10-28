@@ -59,6 +59,8 @@ Weapons, armor and loot can have durability, switched on per item in the Durabil
 
 **Quick, without the settings:** the GM and the item's owner change durability right on the hammer tag, in an inventory row or in the item sheet header. Click: −1, right click: +1.
 
+**Off for the whole world:** the GM unticks **Durability** in the module settings (Configure Settings → The Mist Age - Equipment). Durability is then hidden everywhere and cannot be changed: no tags, no block on the item's Settings tab, no clicks. The numbers stay on the items; tick it again and everything is as it was. Open sheets update at once.
+
 Durability shows in the item's row in any inventory (a hammer and 4/6, or Broken), in the item sheet header and in a container's contents. It is stored on the item (`flags.mist-age-equipment.durability`: `enabled`, `value`, `max`), so it travels with it: to another character, into a pile, into a backpack.
 
 ## Armor slots on every armor
@@ -86,6 +88,7 @@ Capacity is one shared pool, as in the Toolkit: Strength plus the bonuses of wha
 
 ## Data
 
+- durability on in the world: the world setting `mist-age-equipment.durability`;
 - Wearable: `flags.mist-age-equipment.wearable`;
 - Container: `flags.mist-age-equipment.container`;
 - the container an item is in: `flags.mist-age-equipment.inside` (the container's id on the same actor);
@@ -96,7 +99,7 @@ Capacity is one shared pool, as in the Toolkit: Strength plus the bonuses of wha
 - `scripts/layout.js`: the layout rules, without Foundry.
 - `scripts/inventory.js`: the tab template, its context, drag and drop.
 - `scripts/wear.js`: the item checkboxes, the wear button, capacity bonuses only while worn.
-- `scripts/durability.js`: durability rules, the block in the item settings, the tags in inventories, sheet headers and container contents, stepping by clicks.
+- `scripts/durability.js`: durability rules, the world setting that switches it off, the block in the item settings, the tags in inventories, sheet headers and container contents, stepping by clicks.
 - `scripts/armor.js`: marked armor slots in rows, on the armor sheet and in container contents.
 - `scripts/packing.js`: the packed contents of containers: moving, unpacking, deleting, the list on the sheet.
 

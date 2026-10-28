@@ -15,7 +15,15 @@ globalThis.game = {
 		localize: key => en[key.replace("MIST_EQUIP.", "")] ?? key,
 		format: (key, data) => (en[key.replace("MIST_EQUIP.", "")] ?? key).replace(/{(\w+)}/g, (m, k) => data[k])
 	},
-	itempiles: { API: { isValidItemPile: () => false } }
+	itempiles: { API: { isValidItemPile: () => false } },
+	// Foundry's settings: registered with a default, read and written by module and key.
+	settings: {
+		settings: new Map(),
+		values: new Map(),
+		register(module, key, config) { this.settings.set(`${module}.${key}`, config); this.values.set(`${module}.${key}`, config.default); },
+		get(module, key) { return this.values.get(`${module}.${key}`); },
+		set(module, key, value) { this.values.set(`${module}.${key}`, value); this.settings.get(`${module}.${key}`).onChange?.(value); }
+	}
 };
 
 const D = await import(`${S}/durability.js`);
@@ -187,6 +195,36 @@ dagger.isOwner = true;
 element = renderItem(dagger, settingsSheet());
 await element.querySelector(".mist-durability-line .mist-durability").fire("click");
 assert.equal(D.getDurability(dagger).value, 2);
+
+// The world setting: on by default, in the module settings; off hides durability everywhere and keeps the numbers.
+const setting = game.settings.settings.get(`mist-age-equipment.${D.DURABILITY_SETTING}`);
+assert.equal(setting.scope, "world");
+assert.equal(setting.config, true);
+assert.equal(setting.default, true);
+assert.equal(D.durabilityOn(), true);
+const rendered = [];
+globalThis.foundry.applications = { instances: new Map([
+	["actor", { rendered: true, document: { documentName: "Actor" }, render() { rendered.push("actor"); } }],
+	["item", { rendered: true, document: { documentName: "Item" }, render() { rendered.push("item"); } }],
+	["closed", { rendered: false, document: { documentName: "Item" }, render() { rendered.push("closed"); } }],
+	["journal", { rendered: true, document: { documentName: "JournalEntry" }, render() { rendered.push("journal"); } }]
+]) };
+await game.settings.set("mist-age-equipment", D.DURABILITY_SETTING, false);
+assert.deepEqual(rendered, ["actor", "item"], "open actor and item sheets are drawn again");
+assert.equal(D.durabilityOn(), false);
+const hammer = item("weapon", { enabled: true, value: 2, max: 3 });
+hammer.isOwner = true;
+assert.equal(D.getDurability(hammer), null, "off: no durability");
+assert.equal(D.stepChanges(hammer, -1), null, "off: nothing to step");
+const offRows = rows([hammer.id]);
+for (const fn of hooks.renderActorSheetV2) { fn({ document: { type: "character", items: new Map([[hammer.id, hammer]]), system: { metadata: { hasInventory: true } } }, isEditable: true }, offRows); }
+assert.equal(offRows.querySelector(".mist-durability"), null, "off: no tag in the inventory");
+element = renderItem(hammer, settingsSheet());
+assert.equal(block(element), null, "off: no block on the settings tab, even for the GM");
+assert.equal(element.querySelector(".mist-durability-line"), null, "off: nothing in the header");
+await game.settings.set("mist-age-equipment", D.DURABILITY_SETTING, true);
+assert.deepEqual(D.getDurability(hammer), { value: 2, max: 3, broken: false }, "on again: as it was");
+delete globalThis.foundry.applications;
 
 // Durability travels in item data: a packed backpack shows it in its contents.
 const packed = { type: "loot", parent: null, flags: { "mist-age-equipment": { container: true, contents: [

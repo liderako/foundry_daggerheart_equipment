@@ -2,17 +2,27 @@ import { MODULE_ID } from "./constants.js";
 
 // Durability of weapons, armor and loot, switched on per item by the GM, who sets its maximum. The GM and the item's
 // owner lower it (and raise it back) on the item's settings tab; at 0 the item is marked broken and works as before.
+// A world setting switches durability off for the whole world: it is hidden everywhere and kept on the items.
 export const DURABILITY_PATH = `flags.${MODULE_ID}.durability`;
 export const DURABILITY_TYPES = new Set(["weapon", "armor", "loot"]);
 export const DEFAULT_MAX = 6;
+export const DURABILITY_SETTING = "durability";
 
 const localize = key => game.i18n.localize(`MIST_EQUIP.${key}`);
 const format = (key, data) => game.i18n.format(`MIST_EQUIP.${key}`, data);
 const whole = (value, fallback) => (Number.isFinite(Number(value)) && value !== null && value !== "" ? Math.round(Number(value)) : fallback);
 
+/** Whether durability is on in this world; on until the setting is registered and switched off. */
+export function durabilityOn() {
+	if (!game.settings?.settings?.has?.(`${MODULE_ID}.${DURABILITY_SETTING}`)) {
+		return true;
+	}
+	return game.settings.get(MODULE_ID, DURABILITY_SETTING) !== false;
+}
+
 /** An item's durability when it has one: value between 0 and the maximum; null when it is off or not for this item. */
 export function getDurability(item) {
-	if (!DURABILITY_TYPES.has(item?.type)) {
+	if (!DURABILITY_TYPES.has(item?.type) || !durabilityOn()) {
 		return null;
 	}
 	const data = foundry.utils.getProperty(item, DURABILITY_PATH);
@@ -114,6 +124,9 @@ function injectSettings(sheet, element) {
 		return;
 	}
 	tab.querySelector(".mist-durability-settings")?.remove();
+	if (!durabilityOn()) {
+		return;
+	}
 	const isGM = game.user.isGM;
 	const durability = getDurability(item);
 	if (!durability && !isGM) {
@@ -174,8 +187,26 @@ function injectHeader(sheet, element) {
 	}
 }
 
+/** Open actor and item sheets drawn again, so durability appears or goes away at once. */
+function renderSheets() {
+	for (const app of foundry.applications.instances?.values?.() ?? []) {
+		if (app.rendered && ["Actor", "Item"].includes(app.document?.documentName)) {
+			app.render();
+		}
+	}
+}
+
 /** Called during init. */
 export function registerDurability() {
+	game.settings.register(MODULE_ID, DURABILITY_SETTING, {
+		name: "MIST_EQUIP.SettingDurability",
+		hint: "MIST_EQUIP.SettingDurabilityHint",
+		scope: "world",
+		config: true,
+		type: Boolean,
+		default: true,
+		onChange: renderSheets
+	});
 	Hooks.on("renderActorSheetV2", (sheet, element) => {
 		if (sheet.document.system?.metadata?.hasInventory) {
 			injectRows(sheet, element);
