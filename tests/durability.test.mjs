@@ -152,6 +152,42 @@ for (const type of ["character", "party", "adversary"]) {
 	shield.flags["mist-age-equipment"].durability.value = 0;
 }
 
+// The GM and the owner step durability straight from the tag: a click lowers it, a right click raises it.
+const dagger = item("weapon", { enabled: true, value: 2, max: 3 });
+dagger.isOwner = true;
+const owned = { type: "character", items: new Map([[dagger.id, dagger]]), system: { metadata: { hasInventory: true } } };
+const list = rows([dagger.id]);
+const renderOwned = isEditable => { for (const fn of hooks.renderActorSheetV2) { fn({ document: owned, isEditable }, list); } return list.querySelector(".mist-durability"); };
+let stepTag = renderOwned(true);
+assert.ok(stepTag.classList.contains("mist-durability-step"));
+assert.equal(stepTag.getAttribute("data-tooltip"), "Durability 2 of 3<br>Click: −1, right click: +1", "the tooltip says how");
+await stepTag.fire("click");
+assert.equal(D.getDurability(dagger).value, 1, "a click lowers it");
+await renderOwned(true).fire("click");
+await renderOwned(true).fire("click");
+assert.deepEqual(D.getDurability(dagger), { value: 0, max: 3, broken: true }, "down to broken, and no lower");
+await renderOwned(true).fire("contextmenu");
+assert.equal(D.getDurability(dagger).value, 1, "a right click raises it");
+for (let step = 0; step < 4; step++) {
+	await renderOwned(true).fire("contextmenu");
+}
+assert.equal(D.getDurability(dagger).value, 3, "no higher than the maximum");
+// Not the owner, or a sheet that cannot be edited: a plain tag, and clicks do nothing.
+stepTag = renderOwned(false);
+assert.ok(!stepTag.classList.contains("mist-durability-step"));
+await stepTag.fire("click");
+assert.equal(D.getDurability(dagger).value, 3);
+dagger.isOwner = false;
+stepTag = renderOwned(true);
+assert.ok(!stepTag.classList.contains("mist-durability-step"));
+await stepTag.fire("click");
+assert.equal(D.getDurability(dagger).value, 3);
+// The header of the item's own sheet steps it too.
+dagger.isOwner = true;
+element = renderItem(dagger, settingsSheet());
+await element.querySelector(".mist-durability-line .mist-durability").fire("click");
+assert.equal(D.getDurability(dagger).value, 2);
+
 // Durability travels in item data: a packed backpack shows it in its contents.
 const packed = { type: "loot", parent: null, flags: { "mist-age-equipment": { container: true, contents: [
 	{ name: "Sword", type: "weapon", flags: { "mist-age-equipment": { durability: { enabled: true, value: 0, max: 3 } } } },

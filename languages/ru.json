@@ -26,6 +26,7 @@
 		"DurabilityDecrease": "Уменьшить прочность на 1",
 		"DurabilityIncrease": "Увеличить прочность на 1",
 		"DurabilityHint": "Прочность {value} из {max}",
+		"DurabilityStepHint": "Клик — −1, правый клик — +1",
 		"Broken": "Сломано",
 		"BrokenHint": "Сломано: прочность 0 из {max}. Предмет работает как прежде; что это значит, решает мастер."
 	}

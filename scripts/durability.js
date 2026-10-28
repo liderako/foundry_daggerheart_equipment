@@ -51,13 +51,34 @@ export function stepChanges(item, delta) {
 	return value === current.value ? null : { [`${DURABILITY_PATH}.value`]: value };
 }
 
-/** The durability tag: a hammer and value/max, or broken. */
-export function durabilityTag(durability) {
-	const tooltip = foundry.utils.escapeHTML(format(durability.broken ? "BrokenHint" : "DurabilityHint", durability));
+/** The durability tag: a hammer and value/max, or broken. A steppable tag says it is lowered and raised by clicks. */
+export function durabilityTag(durability, { steppable = false } = {}) {
+	let tooltip = format(durability.broken ? "BrokenHint" : "DurabilityHint", durability);
+	if (steppable) {
+		tooltip += `<br>${localize("DurabilityStepHint")}`;
+	}
 	const text = durability.broken
 		? `<i class="fa-solid fa-heart-crack" inert></i> ${localize("Broken")}`
 		: `<i class="fa-solid fa-hammer" inert></i> ${durability.value}/${durability.max}`;
-	return `<div class="tag mist-durability${durability.broken ? " broken" : ""}" data-tooltip="${tooltip}">${text}</div>`;
+	return `<div class="tag mist-durability${durability.broken ? " broken" : ""}${steppable ? " mist-durability-step" : ""}" data-tooltip="${foundry.utils.escapeHTML(tooltip)}">${text}</div>`;
+}
+
+/** The GM and the item's owner step its durability straight from the tag: a click lowers it, a right click raises it. */
+function canStep(item, sheet) {
+	return sheet.isEditable && item.isOwner;
+}
+
+function listenSteps(tag, item) {
+	const step = delta => event => {
+		event.preventDefault();
+		event.stopPropagation();
+		const changes = stepChanges(item, delta);
+		if (changes) {
+			item.update(changes);
+		}
+	};
+	tag.addEventListener("click", step(-1));
+	tag.addEventListener("contextmenu", step(1));
 }
 
 /** The tag on every row of an item with durability, in any inventory. */
@@ -65,12 +86,17 @@ function injectRows(sheet, element) {
 	for (const row of element.querySelectorAll("li.inventory-item[data-item-id]")) {
 		row.querySelector(".mist-durability")?.remove();
 		row.classList?.remove("mist-broken");
-		const durability = getDurability(sheet.document.items?.get(row.dataset.itemId));
+		const item = sheet.document.items?.get(row.dataset.itemId);
+		const durability = getDurability(item);
 		const tags = row.querySelector(".item-tags");
 		if (!durability || !tags) {
 			continue;
 		}
-		tags.insertAdjacentHTML("beforeend", durabilityTag(durability));
+		const steppable = canStep(item, sheet);
+		tags.insertAdjacentHTML("beforeend", durabilityTag(durability, { steppable }));
+		if (steppable) {
+			listenSteps(tags.querySelector(".mist-durability"), item);
+		}
 		if (durability.broken) {
 			row.classList?.add("mist-broken");
 		}
@@ -141,7 +167,11 @@ function injectHeader(sheet, element) {
 	if (!header || !durability) {
 		return;
 	}
-	header.insertAdjacentHTML("beforeend", `<h3 class="mist-durability-line">${durabilityTag(durability)}</h3>`);
+	const steppable = canStep(sheet.document, sheet);
+	header.insertAdjacentHTML("beforeend", `<h3 class="mist-durability-line">${durabilityTag(durability, { steppable })}</h3>`);
+	if (steppable) {
+		listenSteps(header.querySelector(".mist-durability-line .mist-durability"), sheet.document);
+	}
 }
 
 /** Called during init. */

@@ -26,6 +26,7 @@
 		"DurabilityDecrease": "Lower durability by 1",
 		"DurabilityIncrease": "Raise durability by 1",
 		"DurabilityHint": "Durability {value} of {max}",
+		"DurabilityStepHint": "Click: −1, right click: +1",
 		"Broken": "Broken",
 		"BrokenHint": "Broken: durability 0 of {max}. It still works; the GM decides what that means."
 	}
