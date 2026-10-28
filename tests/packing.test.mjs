@@ -150,7 +150,7 @@ assert.deepEqual(names(pile), ["Backpack"], "a pile keeps the backpack packed");
 const pileBackpack = [...pile.items][0];
 assert.deepEqual(contentsTree(pileBackpack).map(entry => [entry.name, entry.quantity, entry.children.map(child => child.name)]), [["Rope", 3, []], ["Pouch", 1, ["Ring"]]], "what it holds is seen from its packed copy");
 
-// The hero drags it from the pile onto Worn on his sheet (the case that lost Ле'Фір's things): unpacked, worn.
+// The hero drags it from the pile onto Worn on their sheet (the case that once lost a backpack's contents): unpacked, worn.
 const heroSheet = Object.assign(new Sheet(), { document: hero });
 await heroSheet._onDropItem({ target: { closest: () => ({ dataset: { mistSection: "worn" } }) } }, pileBackpack);
 await sleep(120);

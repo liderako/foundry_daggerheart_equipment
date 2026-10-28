@@ -1,102 +1,112 @@
 # The Mist Age - Equipment
 
-Модуль Foundry VTT для системы Daggerheart: инвентарь, разложенный так, как вещи носятся. Вместо четырёх списков (оружие, броня, расходники, лут) — что надето, что при себе и контейнеры (рюкзак, сумка) со своим содержимым по категориям, вложенные друг в друга.
+A Foundry VTT module for the Daggerheart system: the inventory laid out the way things are carried. Instead of four lists (weapons, armor, consumables, loot) it shows what is worn, what is at hand, and containers (a backpack, a bag) with their contents by category, nested inside one another.
 
-## Что нужно
+## Requirements
 
-- Foundry VTT 13–14, система Daggerheart.
-- Рекомендуется **The Mist Age - Toolkit**: вес в слотах и вместимость. Без него раскладка работает, но слоты не считаются.
+- Foundry VTT 13–14, the Daggerheart system.
+- **The Mist Age - Toolkit** is recommended: weight in slots and carrying capacity. Without it the layout works, but slots are not counted.
 
-## Установка
+## Installation
 
-Папка модуля — `Data/modules/mist-age-equipment`. Включить **The Mist Age - Equipment** в мире.
+In Foundry, install the module from its manifest URL:
 
-## Инвентарь
+```
+https://github.com/liderako/foundry_daggerheart_equipment/releases/latest/download/module.json
+```
 
-На вкладке инвентаря у персонажей, противников и компаньонов, сверху вниз:
+Or put the module folder at `Data/modules/mist-age-equipment`. Then enable **The Mist Age - Equipment** in your world.
 
-- **Надето** — экипированное оружие и броня, надетые одежда и рюкзак.
-- **При себе** — всё, что не надето и не лежит в контейнере, по категориям. Здесь же кнопки создания предметов.
-- **Контейнеры** — свой раздел у каждого надетого контейнера и у контейнера при себе: его содержимое по категориям и сколько слотов внутри. Контейнер в контейнере (мешочек в рюкзаке) рисуется внутри раздела своего контейнера.
+## Inventory
 
-**Перенос — перетаскиванием.** Перетащи предмет на раздел:
+On the inventory tab of characters, adversaries and companions, from top to bottom:
 
-- на контейнер — предмет кладётся внутрь (если был надет или экипирован, снимается);
-- на «При себе» — достаётся из контейнера;
-- на «Надето» — одежда и рюкзак надеваются; оружие и броня экипируются своими кнопками, как обычно.
+- **Worn**: equipped weapons and armor, worn clothing and backpacks.
+- **At hand**: everything that is not worn and not in a container, by category. The buttons that create items are here too.
+- **Containers**: a section for every worn container and every container at hand, with its contents by category and how many slots they take. A container inside a container (a pouch in a backpack) is drawn inside its container's section.
 
-Предмет, перетащенный с другого листа или из компендиума, ложится туда, куда его бросили. Раздел, куда упадёт предмет, подсвечивается. Контейнер нельзя положить в самого себя или в то, что лежит в нём.
+**Moving things is drag and drop.** Drag an item onto a section:
 
-Поиск и фильтр инвентаря персонажа работают как раньше.
+- onto a container: the item goes inside (if it was worn or equipped, it is taken off);
+- onto At hand: it is taken out of its container;
+- onto Worn: clothing and backpacks are put on; weapons and armor are equipped with their own buttons, as usual.
 
-## Контейнер уносит своё содержимое
+An item dragged from another sheet or a compendium lands where it was dropped. The section an item would land in is highlighted. A container cannot go inside itself or into anything it holds.
 
-Рюкзак ведёт себя как настоящий контейнер:
+Search and filter on the character inventory work as before.
 
-- **Отдал рюкзак** другому персонажу (перетащил на его лист) — рюкзак переходит целиком, вместе со всем, что внутри, включая вложенные мешочки. У прежнего владельца эти вещи пропадают, у нового появляются внутри рюкзака (в «При себе», не надетым — если не бросить его прямо на «Надето» или в контейнер). Рюкзаки при этом не складываются в стопку с таким же рюкзаком.
-- **Выбросил рюкзак** в кучу Item Piles — в куче лежит один рюкзак, содержимое упаковано внутри него. Кто подберёт рюкзак, получит его вместе с вещами.
-- **Перетащил рюкзак** в список предметов мира или в компендиум — содержимое сохраняется в нём.
-- **Удалил рюкзак** — всё, что внутри, удаляется вместе с ним.
+## A container takes its contents along
 
-**Что в рюкзаке, видно на его листе:** вверху вкладки описания — «Содержимое» со списком вещей, количеством и вложенными контейнерами. У персонажа это то, что лежит в рюкзаке сейчас; в куче, в мире или компендиуме — упакованное.
+A backpack behaves like a real container:
 
-Как это устроено: у персонажа вещи в рюкзаке — обычные предметы (их можно использовать, они считаются в слотах), а рюкзак хранит их упакованную копию (`flags.mist-age-equipment.contents`), которая обновляется при каждом изменении. Когда рюкзак появляется в инвентаре, вещи из копии создаются внутри него; когда рюкзак уходит, вещи внутри удаляются. Кучи Item Piles держат рюкзак упакованным и не складывают контейнеры в стопку (`flags.item-piles.item.canStack = "no"`).
+- **Give the backpack** to another character (drag it onto their sheet): it moves whole, with everything inside, nested pouches included. The items disappear from the old owner and appear inside the backpack on the new one (at hand and not worn, unless it is dropped straight onto Worn or into a container). A backpack does not stack with an identical one.
+- **Drop the backpack** into an Item Piles pile: the pile holds one backpack with the contents packed inside it. Whoever picks it up gets it with everything in it.
+- **Drag the backpack** into the world's item list or a compendium: its contents are kept inside it.
+- **Delete the backpack**: everything inside is deleted with it.
 
-## Прочность
+**The backpack's sheet shows what is in it:** Contents at the top of the description tab, with the items, their quantities and nested containers. On a character this is what is in the backpack now; in a pile, the world or a compendium it is what is packed.
 
-У оружия, брони и лута можно включить прочность — отдельно для каждого предмета, на вкладке **Settings** предмета, блок «Прочность»:
+How it works: on a character, the items in a backpack are ordinary items (they can be used, and they count toward slots), and the backpack keeps a packed copy of them (`flags.mist-age-equipment.contents`) that is refreshed on every change. When a backpack arrives in an inventory, the items from the copy are created inside it; when it leaves, the items inside are deleted. Item Piles piles keep backpacks packed and never stack containers (`flags.item-piles.item.canStack = "no"`).
 
-- **GM** ставит галочку «Есть прочность» (прочность начинается полной, по умолчанию 6 из 6) и задаёт **максимум**. Если опустить максимум ниже оставшейся прочности, она урезается до него; поднять максимум — не чинит.
-- **GM и владелец предмета** уменьшают и увеличивают прочность кнопками − и +, от 0 до максимума. Остальные игроки видят прочность, но кнопки у них выключены.
-- **0 — «Сломано»:** красная метка на предмете, название в инвентаре красное. Предмет работает как прежде: что значит поломка, решает мастер. Кнопкой + его можно поднять обратно.
-- Если снять галочку, прочность скрывается, но числа сохраняются: включишь снова — будет, как было.
+## Durability
 
-**Быстро, без настроек:** GM и владелец предмета меняют прочность прямо по метке с молотком — в строке инвентаря или в шапке листа предмета. Клик — −1, правый клик — +1.
+Weapons, armor and loot can have durability, switched on per item in the Durability block on the item's **Settings** tab:
 
-Прочность видна в строке предмета в любом инвентаре (молоток и «4/6» или «Сломано»), в шапке листа предмета и в списке содержимого контейнера. Хранится в предмете (`flags.mist-age-equipment.durability`: `enabled`, `value`, `max`), поэтому переходит вместе с ним — другому персонажу, в кучу, в рюкзак.
+- **The GM** ticks Has durability (it starts full, 6 of 6 by default) and sets the **Maximum**. Lowering the maximum below the durability left cuts it down; raising the maximum does not repair it.
+- **The GM and the item's owner** lower and raise durability with the − and + buttons, from 0 to the maximum. Other players see it, but their buttons are off.
+- **0 is Broken:** a red tag on the item, and its name is red in the inventory. The item works as before; the GM decides what broken means. The + button raises it back.
+- Unticking the box hides durability but keeps the numbers: tick it again and it is as it was.
 
-## Слоты брони на любой броне
+**Quick, without the settings:** the GM and the item's owner change durability right on the hammer tag, in an inventory row or in the item sheet header. Click: −1, right click: +1.
 
-Daggerheart показывает отмеченные слоты брони только у надетой брони, хотя хранит их на самой броне (`system.armor.current` из `system.armor.max`). Модуль показывает их у каждой брони:
+Durability shows in the item's row in any inventory (a hammer and 4/6, or Broken), in the item sheet header and in a container's contents. It is stored on the item (`flags.mist-age-equipment.durability`: `enabled`, `value`, `max`), so it travels with it: to another character, into a pile, into a backpack.
 
-- в строке брони в любом инвентаре (персонаж, противник, компаньон, группа) — тег со щитами: закрашенный за каждый отмеченный слот, контур за свободный, и число «2/4»; подсказка поясняет;
-- в шапке листа самой брони — «Отмечено слотов: 2/4»;
-- в списке содержимого рюкзака, если броня лежит в нём (и в куче, и в мире).
+## Armor slots on every armor
 
-## Одежда, рюкзаки, контейнеры
+Daggerheart shows marked armor slots only on worn armor, although it keeps them on the armor itself (`system.armor.current` out of `system.armor.max`). The module shows them on every armor:
 
-На вкладке **Settings** у лута GM видит две галочки:
+- in the armor's row in any inventory (character, adversary, companion, party): a tag of shields, filled for each marked slot and outlined for each free one, with a 2/4 count; the tooltip explains it;
+- in the header of the armor's own sheet: Marked slots: 2/4;
+- in a backpack's contents when the armor is inside it (in a pile and in the world too).
 
-- **Можно носить** — надевается как броня. В строке предмета появляется кнопка с рубашкой: надеть / снять. Надетое не занимает слотов.
-- **Контейнер** — вмещает другие предметы: у него появляется свой раздел.
+## Clothing, backpacks, containers
 
-Рюкзак обычно и то и другое.
+On the **Settings** tab of loot, the GM sees two checkboxes:
 
-**Бонус к вместимости только надетым.** Эффект на предмете, который добавляет вместимость (`flags.mist-age-weight.bonusSlots`, Add), у лута с галочкой «Можно носить» работает, только пока предмет надет: рюкзак в руках или на дне сумки слотов не добавляет.
+- **Wearable**: put on like armor. The item's row gets a shirt button to put it on and take it off. Worn items take no slots.
+- **Container**: holds other items and gets its own section.
 
-## Вместимость
+A backpack is usually both.
 
-Считается одним общим пулом, как в Toolkit: Сила + бонусы надетого (рюкзак, одежда). Контейнеры только раскладывают вещи и показывают, сколько слотов в каждом.
+**Capacity bonuses count only while worn.** An effect on an item that adds capacity (`flags.mist-age-weight.bonusSlots`, Add) works on Wearable loot only while the item is worn: a backpack carried in hand or at the bottom of a bag adds no slots.
 
-## Данные
+## Capacity
 
-- «можно носить» — `flags.mist-age-equipment.wearable`;
-- «контейнер» — `flags.mist-age-equipment.container`;
-- в каком контейнере лежит предмет — `flags.mist-age-equipment.inside` (id контейнера на том же актёре);
-- «надето» — `flags.mist-age-weight.worn`, общий с весом Toolkit.
+Capacity is one shared pool, as in the Toolkit: Strength plus the bonuses of what is worn (a backpack, clothing). Containers only sort items and show how many slots each one holds.
 
-## Для разработчиков
+## Data
 
-- `scripts/layout.js` — правила раскладки без Foundry.
-- `scripts/inventory.js` — шаблон вкладки, контекст, перенос перетаскиванием.
-- `scripts/wear.js` — галочки предмета, кнопка «надеть», бонус к вместимости только надетым.
-- `scripts/durability.js` — прочность: правила, блок в настройках предмета, метки в инвентаре, шапке и содержимом контейнеров.
-- `scripts/armor.js` — отмеченные слоты брони в строках, на листе брони и в содержимом контейнеров.
-- `scripts/packing.js` — упакованное содержимое контейнеров: перенос, распаковка, удаление, список на листе.
+- Wearable: `flags.mist-age-equipment.wearable`;
+- Container: `flags.mist-age-equipment.container`;
+- the container an item is in: `flags.mist-age-equipment.inside` (the container's id on the same actor);
+- Worn: `flags.mist-age-weight.worn`, shared with the Toolkit's weight.
 
-## Тесты
+## For developers
 
-Без запуска Foundry, на Node 20+. Шаблоны рендерятся Handlebars, а DOM строится на htmlparser2 из установленного Foundry; путь к нему — переменная FOUNDRY_APP (по умолчанию C:/Program Files/Foundry Virtual Tabletop/resources/app/).
+- `scripts/layout.js`: the layout rules, without Foundry.
+- `scripts/inventory.js`: the tab template, its context, drag and drop.
+- `scripts/wear.js`: the item checkboxes, the wear button, capacity bonuses only while worn.
+- `scripts/durability.js`: durability rules, the block in the item settings, the tags in inventories, sheet headers and container contents, stepping by clicks.
+- `scripts/armor.js`: marked armor slots in rows, on the armor sheet and in container contents.
+- `scripts/packing.js`: the packed contents of containers: moving, unpacking, deleting, the list on the sheet.
+
+## Releases
+
+Pushing a `vX.Y.Z` tag runs `.github/workflows/release.yml`: it sets that version and the manifest and download URLs in `module.json`, builds `module.zip`, and attaches both to the GitHub release.
+
+## Tests
+
+The tests run on Node 20+ without starting Foundry. Templates are rendered with Handlebars and the DOM is built with htmlparser2 from the installed Foundry; its path is the FOUNDRY_APP variable (by default `C:/Program Files/Foundry Virtual Tabletop/resources/app/`).
 
 ```
 node tests/equipment.test.mjs
@@ -106,19 +116,19 @@ node tests/armor.test.mjs
 node tests/durability.test.mjs
 ```
 
-`tests/dom.mjs` — маленький DOM для тестов на htmlparser2 из установленного Foundry.
+`tests/dom.mjs` is a small DOM for the tests, on htmlparser2 from the installed Foundry.
 
-`containers.test.mjs` — 23 случая с рюкзаком, в котором верёвка и мешочек с кольцом. Проверяется, что вещи не теряются и не удваиваются:
+`containers.test.mjs` runs 23 cases with a backpack holding rope and a pouch with a ring, and checks that nothing is lost or doubled:
 
-- куча Item Piles и обратно: через Item Piles и перетаскиванием из кучи на лист (в «Надето»);
-- лист другого персонажа и обратно, передача через Item Piles;
-- инвентарь группы (party), в том числе рядом с таким же рюкзаком, и обратно; через Item Piles тоже;
-- список предметов мира и обратно;
-- тело павшего противника — и связанного актёра, и токена без связи; возврат тела в противника;
-- части контейнера: мешочек из рюкзака к другому персонажу, вещь из рюкзака в кучу и обратно в рюкзак, вещь из рюкзака через Item Piles, перекладывание между контейнерами одного персонажа, «достать» в «При себе», удаление вещи во вложенном мешочке;
-- рюкзак с другого листа прямо в мешок на этом листе;
-- пустой контейнер, стопка из двух рюкзаков, копия рюкзака у того же персонажа;
-- изменение прямо перед уходом, удаление рюкзака;
-- нет прав на цель — ничего не переносится;
-- рюкзаки, заполненные до упаковки, получают упакованную копию при загрузке GM;
-- не удалось распаковать — вещи остаются упакованными в рюкзаке, видны на его листе и выходят у того, кто сможет их принять.
+- to an Item Piles pile and back: through Item Piles, and by dragging from the pile onto a sheet (onto Worn);
+- to another character's sheet and back, and handed over through Item Piles;
+- to the party inventory, also next to an identical backpack, and back; through Item Piles too;
+- to the world's item list and back;
+- the body of a fallen adversary, for both a linked actor and an unlinked token; the body turned back into an adversary;
+- parts of a container: the pouch from the backpack to another character, an item from the backpack into a pile and back into the backpack, an item from the backpack through Item Piles, moving between containers of one character, taking out to At hand, deleting an item in the nested pouch;
+- a backpack from another sheet straight into a sack on this sheet;
+- an empty container, a stack of two backpacks, a copy of the backpack on the same character;
+- a change made right before it leaves, deleting the backpack;
+- no permission on the target: nothing moves;
+- backpacks filled before packing existed get their packed copy when the GM loads;
+- unpacking fails: the items stay packed in the backpack, show on its sheet, and come out for whoever can take them.

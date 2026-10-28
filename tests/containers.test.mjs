@@ -193,7 +193,7 @@ await settle();
 assertCarries(hero, ["Torch×1"]);
 assert.equal(getProperty(bagOf(hero), "flags.mist-age-weight.worn"), false, "picked up, it is in hand, not on the back");
 
-// 2. Thrown on the ground and dragged from the pile onto the sheet, onto Worn (what lost Ле'Фір's things).
+// 2. Thrown on the ground and dragged from the pile onto the sheet, onto Worn (the case that once lost a backpack's contents).
 await itemPiles(bagOf(hero), ground);
 await settle();
 await dropOn(hero, bagOf(ground), "worn");
