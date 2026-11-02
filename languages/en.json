@@ -30,6 +30,23 @@
 		"Broken": "Broken",
 		"BrokenHint": "Broken: durability 0 of {max}. It still works; the GM decides what that means.",
 		"SettingDurability": "Durability",
-		"SettingDurabilityHint": "Durability on weapons, armor and loot. Off, it is hidden everywhere and cannot be changed; the numbers stay on the items and come back when it is switched on again."
+		"SettingDurabilityHint": "Durability on weapons, armor and loot. Off, it is hidden everywhere and cannot be changed; the numbers stay on the items and come back when it is switched on again.",
+		"Mystery": "Mystery",
+		"Unidentified": "Unidentified",
+		"UnidentifiedEnable": "Unidentified",
+		"UnidentifiedEnableHint": "Until the GM identifies it, the item goes by the name and picture below, for everyone, the GM too, without its description, features or tags, and its effects do not work. Players cannot open, equip, put on or use it. The real item is shown here.",
+		"MysteryName": "Name for players",
+		"MysteryNameHint": "What players call the item until it is identified, such as Strange ring. Empty: Unidentified item.",
+		"UnidentifiedName": "Unidentified item",
+		"MysteryImg": "Picture for players",
+		"MysteryImgHint": "The picture players see until the item is identified. Empty: a stone with a question mark.",
+		"UnidentifiedDescription": "You have not studied this item yet. Only the GM can reveal what it is.",
+		"UnidentifiedHint": "Not identified yet: the GM must study it before it can be equipped or used.",
+		"UnidentifiedGMHint": "Unidentified: it is really {name}. Players cannot open, equip or use it. Click to identify.",
+		"Identify": "Identify",
+		"RealItem": "Real item (only you see this)",
+		"Identified": "{shown} is identified: {name}.",
+		"CannotEquipUnidentified": "{name} is not identified yet: the GM must identify it before it can be equipped.",
+		"CannotUseUnidentified": "{name} is not identified yet: it cannot be used until the GM identifies it."
 	}
 }

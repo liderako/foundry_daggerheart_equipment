@@ -222,3 +222,86 @@
 	font-weight: bold;
 	font-variant-numeric: tabular-nums;
 }
+
+.daggerheart .mist-mystery-settings {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.daggerheart .mist-mystery-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.daggerheart .mist-mystery-row input[type="text"] {
+	flex: 1;
+}
+
+.daggerheart .mist-mystery-tag {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	font-style: italic;
+}
+
+.daggerheart .mist-mystery-tag.mist-mystery-identify {
+	cursor: pointer;
+	user-select: none;
+}
+
+.daggerheart .mist-mystery-tag.mist-mystery-identify:hover {
+	filter: brightness(1.2);
+}
+
+.daggerheart .mist-mystery-hint {
+	font-style: italic;
+	opacity: 0.85;
+}
+
+.daggerheart .mist-mystery-sheet {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 12px;
+	padding: 24px 16px;
+	text-align: center;
+}
+
+.daggerheart .mist-mystery-sheet img {
+	width: 96px;
+	height: 96px;
+	object-fit: contain;
+	border: none;
+}
+
+.daggerheart .mist-mystery-preview {
+	flex: none;
+	width: 32px;
+	height: 32px;
+	object-fit: contain;
+	border: none;
+}
+
+.daggerheart .mist-mystery-row file-picker {
+	flex: 1;
+}
+
+.daggerheart .mist-mystery-real {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	padding: 8px;
+	border: 1px dashed light-dark(#b0a68c, #6f6656);
+	border-radius: 6px;
+}
+
+.daggerheart .mist-mystery-real h4 {
+	margin: 0;
+}
+
+.daggerheart .mist-mystery-real-description {
+	max-height: 240px;
+	overflow-y: auto;
+}

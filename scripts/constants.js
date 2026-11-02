@@ -8,6 +8,8 @@ export const CONTAINER_PATH = `${FLAGS}.container`;
 export const INSIDE_PATH = `${FLAGS}.inside`;
 // A container's packed contents: the data of the items inside it, so they leave and arrive with it.
 export const CONTENTS_PATH = `${FLAGS}.contents`;
+// A mysterious item: whether it is still unidentified, and the name players see until the GM identifies it.
+export const MYSTERY_PATH = `${FLAGS}.mystery`;
 // Item Piles stacks alike items into one; a container never does, or its contents would merge away.
 export const STACK_PATH = "flags.item-piles.item.canStack";
 // Shared with the Mist Age toolkit's weight: worn loot takes no slots, and capacity bonuses add to this flag.

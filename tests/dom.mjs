@@ -110,6 +110,11 @@ export class Element {
 		this.node.children.push(...nodes);
 	}
 
+	set innerHTML(html) {
+		this.node.children = [];
+		this.insertAdjacentHTML("beforeend", html);
+	}
+
 	remove() {
 		const siblings = this.node.parent?.children;
 		siblings?.splice(siblings.indexOf(this.node), 1);

@@ -63,6 +63,22 @@ Weapons, armor and loot can have durability, switched on per item in the Durabil
 
 Durability shows in the item's row in any inventory (a hammer and 4/6, or Broken), in the item sheet header and in a container's contents. It is stored on the item (`flags.mist-age-equipment.durability`: `enabled`, `value`, `max`), so it travels with it: to another character, into a pile, into a backpack.
 
+## Unidentified items
+
+The GM can make any weapon, armor, consumable or loot a mystery: in the Mystery block on the item's **Settings** tab, tick **Unidentified**, give it a **Name for players** (such as Strange ring; left empty, it is Unidentified item) and, if you like, a **Picture for players** (left empty, a stone with a question mark, `icons/magic/symbols/question-stone-yellow.webp`).
+
+Until the GM identifies it, for everyone, the GM too:
+
+- the item goes by that name and picture everywhere: inventories, sheets, tooltips, container contents;
+- its description and features are hidden, and so are its tags in the inventory row;
+- its effects do not work.
+
+Players also cannot open it (its sheet shows only its picture, its name and that it is not studied yet), equip or put it on (the equip and wear buttons are gone, and dragging it onto Worn does nothing), use it, or send it to chat; its action buttons are gone from the row. The GM still can.
+
+**The GM reads the real item in the Mystery block** on its Settings tab: its real name, picture and description with features, which only the GM sees. In the inventory row the GM's **Unidentified** tag names the real item in its tooltip. Saving the sheet never writes the name and picture it goes by over the real ones.
+
+**Only the GM identifies it:** by clicking that tag, with the **Identify** button in the Mystery block, or by unticking Unidentified. Everything comes back at once: its name, picture, description, features, and its effects.
+
 ## Armor slots on every armor
 
 Daggerheart shows marked armor slots only on worn armor, although it keeps them on the armor itself (`system.armor.current` out of `system.armor.max`). The module shows them on every armor:
@@ -92,7 +108,8 @@ Capacity is one shared pool, as in the Toolkit: Strength plus the bonuses of wha
 - Wearable: `flags.mist-age-equipment.wearable`;
 - Container: `flags.mist-age-equipment.container`;
 - the container an item is in: `flags.mist-age-equipment.inside` (the container's id on the same actor);
-- Worn: `flags.mist-age-weight.worn`, shared with the Toolkit's weight.
+- Worn: `flags.mist-age-weight.worn`, shared with the Toolkit's weight;
+- Unidentified, and the name and picture players see: `flags.mist-age-equipment.mystery` (`unidentified`, `name`, `img`).
 
 ## For developers
 
@@ -102,6 +119,7 @@ Capacity is one shared pool, as in the Toolkit: Strength plus the bonuses of wha
 - `scripts/durability.js`: durability rules, the world setting that switches it off, the block in the item settings, the tags in inventories, sheet headers and container contents, stepping by clicks.
 - `scripts/armor.js`: marked armor slots in rows, on the armor sheet and in container contents.
 - `scripts/packing.js`: the packed contents of containers: moving, unpacking, deleting, the list on the sheet.
+- `scripts/mystery.js`: unidentified items: the name players see, hidden description, features and tags, the closed sheet, no equipping or use, suppressed effects, the GM's block and identifying.
 
 ## Releases
 
@@ -117,6 +135,7 @@ node tests/packing.test.mjs
 node tests/containers.test.mjs
 node tests/armor.test.mjs
 node tests/durability.test.mjs
+node tests/mystery.test.mjs
 ```
 
 `tests/dom.mjs` is a small DOM for the tests, on htmlparser2 from the installed Foundry.

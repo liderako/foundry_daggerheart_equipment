@@ -2,6 +2,7 @@ import { CONTENTS_PATH, INSIDE_PATH, INVENTORY_TYPES, MODULE_ID, STACK_PATH } fr
 import { armorSlots, slotsHTML } from "./armor.js";
 import { durabilityTag, getDurability } from "./durability.js";
 import { isContainer, locate } from "./layout.js";
+import { shownImg, shownName } from "./mystery.js";
 
 /**
  * Containers carry what is inside them. In an inventory the contents are real items of the actor, put inside the
@@ -180,8 +181,8 @@ export function contentsTree(container) {
 		return live(container);
 	}
 	const packed = entries => entries.map(entry => ({
-		name: entry.name,
-		img: entry.img,
+		name: shownName(entry),
+		img: shownImg(entry),
 		quantity: entry.system?.quantity ?? 1,
 		slots: armorSlots(entry),
 		durability: getDurability(entry),
