@@ -23,6 +23,7 @@
 			{
 				"id": "mist-age-toolkit",
 				"type": "module",
+				"manifest": "https://github.com/liderako/foundry_daggerheart_toolkit/releases/latest/download/module.json",
 				"reason": "Weight in slots and carrying capacity: worn items take no slots and containers show how full they are."
 			}
 		]

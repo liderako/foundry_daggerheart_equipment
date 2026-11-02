@@ -4,8 +4,13 @@ A Foundry VTT module for the Daggerheart system: the inventory laid out the way 
 
 ## Requirements
 
-- Foundry VTT 13–14, the Daggerheart system.
-- **The Mist Age - Toolkit** is recommended: weight in slots and carrying capacity. Without it the layout works, but slots are not counted.
+- Foundry VTT 13–14, the Daggerheart system. Nothing else is required.
+- [**The Mist Age - Toolkit**](https://github.com/liderako/foundry_daggerheart_toolkit) is recommended: weight in slots and carrying capacity. Without it the layout works, but slots are not counted. Install it from its manifest URL:
+
+  ```
+  https://github.com/liderako/foundry_daggerheart_toolkit/releases/latest/download/module.json
+  ```
+- [Item Piles](https://foundryvtt.com/packages/item-piles) is optional: with it, a backpack dropped into a pile or looted from a body keeps its contents packed inside it.
 
 ## Installation
 
@@ -154,3 +159,7 @@ node tests/mystery.test.mjs
 - no permission on the target: nothing moves;
 - backpacks filled before packing existed get their packed copy when the GM loads;
 - unpacking fails: the items stay packed in the backpack, show on its sheet, and come out for whoever can take them.
+
+## License
+
+[MIT](LICENSE) © 2026 asvirido.
