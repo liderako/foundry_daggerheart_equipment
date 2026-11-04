@@ -174,6 +174,7 @@ const gmRing = item("Ring of Flight", "loot", { unidentified: true, name: "Stran
 element = renderItem(gmRing, sheetHTML());
 await settle();
 assert.ok(element.querySelector(".item-sheet-header"), "the GM keeps the sheet");
+assert.ok(element.classList.contains("mist-unidentified"), "the sheet is marked, so its price is hidden");
 const settings = element.querySelector(".mist-mystery-settings");
 assert.ok(settings.querySelector("input[type='checkbox']").checked);
 assert.equal(settings.querySelector("input[type='text']").value, "Strange ring");
@@ -192,6 +193,8 @@ assert.equal(M.isUnidentified(gmRing), false, "identified by the button");
 assert.deepEqual(notes.at(-1), ["info", "Strange ring is identified: Ring of Flight."]);
 assert.equal(gmRing.name, "Ring of Flight", "identified: the real name again");
 assert.equal(gmRing.img, "ring.webp", "and the real picture");
+renderItem(gmRing, element);
+assert.ok(!element.classList.contains("mist-unidentified"), "identified: the same sheet is unmarked, its price shows");
 element = renderItem(gmRing, sheetHTML());
 assert.equal(element.querySelector(".mist-mystery-identify"), null, "identified: no button");
 assert.equal(element.querySelector(".mist-mystery-real"), null, "and no real item block");
@@ -212,6 +215,8 @@ for (const selector of [".item-buttons", "[data-action='toggleEquipItem']", ".mi
 	assert.ok(row(rope.id).querySelector(selector), `an identified row keeps ${selector}`);
 }
 assert.equal(row(rope.id).querySelector(".mist-mystery-tag"), null);
+assert.ok(row(hidden.id).classList.contains("mist-unidentified"), "an unidentified row is marked, so its price is hidden");
+assert.ok(!row(rope.id).classList.contains("mist-unidentified"), "an identified row shows its price");
 renderActor([hidden, rope], list);
 assert.equal(row(hidden.id).querySelectorAll(".mist-mystery-tag").length, 1, "rendered again: one tag");
 asGM(true);
@@ -222,5 +227,11 @@ assert.equal(tag.getAttribute("data-tooltip"), "Unidentified: it is really Ring 
 assert.ok(row(gmHidden.id).querySelector(".item-buttons"), "the GM keeps the buttons");
 await tag.fire("click");
 assert.equal(M.isUnidentified(gmHidden), false, "the GM identifies it from the row");
+renderActor([gmHidden], list);
+assert.ok(!row(gmHidden.id).classList.contains("mist-unidentified"), "identified: the row is unmarked, its price shows");
+
+// The stylesheet hides the Toolkit's price, in rows and sheet headers, on what is marked unidentified.
+const css = readFileSync(new URL("../styles/equipment.css", import.meta.url), "utf8");
+assert.match(css, /\.mist-unidentified \.mist-price-tag,\s*\.mist-unidentified \.item-sheet-header \.mist-price \{\s*display: none !important;/);
 
 console.log("mystery test passed");

@@ -300,13 +300,26 @@ async function identify(item) {
 }
 
 /**
- * Inventory rows of unidentified items. Players see an Unidentified tag and no action buttons, equip or wear buttons;
- * the GM sees a tag naming the real item, and identifies it by clicking the tag.
+ * Marks what shows an unidentified item, so the stylesheet hides what other modules draw on it, such as the Toolkit's
+ * price, whichever of the modules draws last.
+ */
+function markUnidentified(element, unidentified) {
+	if (unidentified) {
+		element.classList.add("mist-unidentified");
+	} else {
+		element.classList.remove("mist-unidentified");
+	}
+}
+
+/**
+ * Inventory rows of unidentified items, which show no price. Players see an Unidentified tag and no action buttons,
+ * equip or wear buttons; the GM sees a tag naming the real item, and identifies it by clicking the tag.
  */
 function injectRows(sheet, element) {
 	for (const row of element.querySelectorAll("li.inventory-item[data-item-id]")) {
 		row.querySelector(".mist-mystery-tag")?.remove();
 		const item = sheet.document.items?.get(row.dataset.itemId);
+		markUnidentified(row, isUnidentified(item));
 		if (!isUnidentified(item)) {
 			continue;
 		}
@@ -340,6 +353,7 @@ export function registerMystery() {
 	Hooks.on("preCreateItem", onPreCreateItem);
 	Hooks.on("daggerheart.preUseAction", onPreUseAction);
 	Hooks.on("renderItemSheetV2", (sheet, element) => {
+		markUnidentified(element, isUnidentified(sheet.document));
 		injectSettings(sheet, element);
 		closeSheet(sheet, element);
 	});

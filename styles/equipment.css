@@ -305,3 +305,9 @@
 	max-height: 240px;
 	overflow-y: auto;
 }
+
+/* An unidentified item shows no value: the Toolkit's price tag in its row and price line in its sheet header. */
+.mist-unidentified .mist-price-tag,
+.mist-unidentified .item-sheet-header .mist-price {
+	display: none !important;
+}

@@ -75,7 +75,7 @@ The GM can make any weapon, armor, consumable or loot a mystery: in the Mystery 
 Until the GM identifies it, for everyone, the GM too:
 
 - the item goes by that name and picture everywhere: inventories, sheets, tooltips, container contents;
-- its description and features are hidden, and so are its tags in the inventory row;
+- its description and features are hidden, and so are its tags in the inventory row and its value in coins (the Toolkit's price, in the row and the sheet header);
 - its effects do not work.
 
 Players also cannot open it (its sheet shows only its picture, its name and that it is not studied yet), equip or put it on (the equip and wear buttons are gone, and dragging it onto Worn does nothing), use it, or send it to chat; its action buttons are gone from the row. The GM still can.
