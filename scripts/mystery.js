@@ -159,7 +159,7 @@ function patchText() {
 function patchUse() {
 	for (const [name, key] of [["use", "CannotUseUnidentified"], ["toChat", "CannotUseUnidentified"]]) {
 		wrapMethod(CONFIG.Item.documentClass.prototype, name, async function(original, ...args) {
-			if (name === "use" && isLocked(this) && isUsableUnidentified(this)) {
+			if (name === "use" && isUsableUnidentified(this)) {
 				const shown = mysteryName(this);
 				// Other modules learn from the options that it was identified by being used, such as Alchemy teaching the
 				// character the brew they drank.

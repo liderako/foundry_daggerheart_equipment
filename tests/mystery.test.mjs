@@ -121,6 +121,13 @@ assert.equal(M.isUsableUnidentified(item("Potion", "consumable", { unidentified:
 assert.equal(M.isUsableUnidentified(item("Ring", "loot", { unidentified: true })), false, "other items only when ticked");
 assert.equal(await sealed.toChat(), null, "it still cannot be sent to chat, which would name its actions");
 assert.equal(M.isUnidentified(sealed), true);
+asGM(true);
+const gmPotion = item("Uneasy Stamina Potion", "consumable", { unidentified: true, name: "Minor Stamina Potion" });
+assert.equal(await gmPotion.use(), "used");
+assert.equal(M.isUnidentified(gmPotion), false, "the GM drinking it for the character identifies it too");
+assert.deepEqual(gmPotion.lastOptions, { "mist-age-equipment": { identifiedBy: "use" } });
+assert.equal(await item("Ring of Flight", "loot", { unidentified: true }).use(), "used", "the GM uses other unidentified items as they are");
+asGM(false);
 calls.length = 0;
 
 // An identified item is as it is.
