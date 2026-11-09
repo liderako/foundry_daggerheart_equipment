@@ -36,7 +36,7 @@ class Item {
 	_getLabels() { return ["d8+2"]; }
 	async use() { calls.push(`use ${this._source.name}`); return "used"; }
 	async toChat() { calls.push(`chat ${this._source.name}`); return "sent"; }
-	async update(changes) {
+	async update(changes, options) { this.lastOptions = options;
 		for (const [key, value] of Object.entries(changes)) { setProperty(this, key, value); }
 		this.prepare();
 	}
@@ -111,6 +111,7 @@ assert.equal(new ActiveEffect(potion).isSuppressed, true, "its effects wait unti
 assert.equal(await potion.use(), "used", "a player can use it");
 assert.deepEqual(calls, ["use Potion of Sleep"]);
 assert.equal(M.isUnidentified(potion), false, "using it identified it");
+assert.deepEqual(potion.lastOptions, { "mist-age-equipment": { identifiedBy: "use" } }, "and says so to other modules");
 assert.equal(potion.name, "Potion of Sleep");
 assert.equal(new ActiveEffect(potion).isSuppressed, false, "its effects work");
 assert.deepEqual(notes.at(-1), ["info", "Murky potion turns out to be Potion of Sleep."]);

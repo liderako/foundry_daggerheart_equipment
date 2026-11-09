@@ -1,4 +1,4 @@
-import { INVENTORY_TYPES, MYSTERY_PATH, WORN_PATH } from "./constants.js";
+import { INVENTORY_TYPES, MODULE_ID, MYSTERY_PATH, WORN_PATH } from "./constants.js";
 
 // Mysterious items. The GM marks an item unidentified and gives it a name and picture to go by instead of its own. Until
 // the GM identifies it, everyone, the GM too, sees it by that name and picture, without its description, features or
@@ -161,7 +161,9 @@ function patchUse() {
 		wrapMethod(CONFIG.Item.documentClass.prototype, name, async function(original, ...args) {
 			if (name === "use" && isLocked(this) && isUsableUnidentified(this)) {
 				const shown = mysteryName(this);
-				await this.update(identifyChanges());
+				// Other modules learn from the options that it was identified by being used, such as Alchemy teaching the
+				// character the brew they drank.
+				await this.update(identifyChanges(), { [MODULE_ID]: { identifiedBy: "use" } });
 				ui.notifications.info(format("UsedUnidentified", { shown, name: this.name }));
 				return original.apply(this, args);
 			}
