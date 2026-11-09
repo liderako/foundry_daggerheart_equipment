@@ -2,11 +2,15 @@ import { INVENTORY_TYPES, MYSTERY_PATH, WORN_PATH } from "./constants.js";
 
 // Mysterious items. The GM marks an item unidentified and gives it a name and picture to go by instead of its own. Until
 // the GM identifies it, everyone, the GM too, sees it by that name and picture, without its description, features or
-// tags, and its effects do not work. Players cannot open its sheet, equip, put on or use it. The GM reads the real item
+// tags, and its effects do not work. Players cannot open its sheet, equip, put on or use it, unless the GM let them use
+// it unidentified (a potion of unknown effect): using it identifies it. The GM reads the real item
 // in the Mystery block on its settings tab, and identifies it.
 const UNIDENTIFIED_PATH = `${MYSTERY_PATH}.unidentified`;
 const NAME_PATH = `${MYSTERY_PATH}.name`;
 const IMG_PATH = `${MYSTERY_PATH}.img`;
+// An unidentified item a player may still use without knowing what it is, such as a potion brewed by chance: using it
+// identifies it.
+const USABLE_PATH = `${MYSTERY_PATH}.usable`;
 // The picture players see for an unidentified item the GM gave no picture of its own: a stone with a question mark.
 export const MYSTERY_IMG = "icons/magic/symbols/question-stone-yellow.webp";
 
@@ -33,6 +37,19 @@ export function isUnidentified(item) {
 /** An unidentified item is locked for players: they cannot open, equip or use it. The GM still can. */
 export function isLocked(item) {
 	return isUnidentified(item) && !isGM();
+}
+
+/**
+ * An unidentified item a player may use anyway: using it identifies it. Consumables (potions) are usable unless the GM
+ * unticked it; anything else only when the GM ticked it.
+ */
+export function isUsableUnidentified(item) {
+	return isUnidentified(item) && usableFlag(item);
+}
+
+function usableFlag(item) {
+	const flag = foundry.utils.getProperty(item, USABLE_PATH);
+	return typeof flag === "boolean" ? flag : item?.type === "consumable";
 }
 
 /** The name players see for an unidentified item: the one the GM gave it, or a general one. */
@@ -136,11 +153,18 @@ function patchText() {
 
 /**
  * A player can neither use an unidentified item nor send it to chat: using it would first offer a choice of its actions
- * by name, and its chat card lists them.
+ * by name, and its chat card lists them. An item marked usable is the exception: using it identifies it first, so its
+ * actions run and its effects work, and the player learns what it was.
  */
 function patchUse() {
 	for (const [name, key] of [["use", "CannotUseUnidentified"], ["toChat", "CannotUseUnidentified"]]) {
-		wrapMethod(CONFIG.Item.documentClass.prototype, name, function(original, ...args) {
+		wrapMethod(CONFIG.Item.documentClass.prototype, name, async function(original, ...args) {
+			if (name === "use" && isLocked(this) && isUsableUnidentified(this)) {
+				const shown = mysteryName(this);
+				await this.update(identifyChanges());
+				ui.notifications.info(format("UsedUnidentified", { shown, name: this.name }));
+				return original.apply(this, args);
+			}
 			if (isLocked(this)) {
 				ui.notifications.warn(format(key, { name: this.name }));
 				return Promise.resolve(null);
@@ -262,6 +286,9 @@ function injectSettings(sheet, element) {
 			<label class="mist-mystery-row" data-tooltip="${escape(localize("UnidentifiedEnableHint"))}">
 				<input type="checkbox" name="${UNIDENTIFIED_PATH}" ${unidentified ? "checked" : ""} ${disabled}> ${localize("UnidentifiedEnable")}
 			</label>
+			<label class="mist-mystery-row" data-tooltip="${escape(localize("UsableUnidentifiedEnableHint"))}">
+				<input type="checkbox" name="${USABLE_PATH}" ${usableFlag(item) ? "checked" : ""} ${disabled}> ${localize("UsableUnidentifiedEnable")}
+			</label>
 			<label class="mist-mystery-row" data-tooltip="${escape(localize("MysteryNameHint"))}">${localize("MysteryName")}
 				<input type="text" name="${NAME_PATH}" value="${escape(name)}" placeholder="${escape(localize("UnidentifiedName"))}" ${disabled}>
 			</label>
@@ -325,7 +352,8 @@ function injectRows(sheet, element) {
 		}
 		const tags = row.querySelector(".item-tags");
 		const gm = game.user.isGM;
-		const tooltip = gm ? format("UnidentifiedGMHint", { name: realName(item) }) : localize("UnidentifiedHint");
+		const usable = isUsableUnidentified(item);
+		const tooltip = gm ? format("UnidentifiedGMHint", { name: realName(item) }) : localize(usable ? "UsableUnidentifiedHint" : "UnidentifiedHint");
 		tags?.insertAdjacentHTML("afterbegin", `<div class="tag mist-mystery-tag${gm ? " mist-mystery-identify" : ""}" data-tooltip="${foundry.utils.escapeHTML(tooltip)}"><i class="fa-solid fa-circle-question" inert></i> ${localize("Unidentified")}</div>`);
 		if (gm) {
 			tags?.querySelector(".mist-mystery-tag")?.addEventListener("click", event => {
@@ -335,7 +363,13 @@ function injectRows(sheet, element) {
 			});
 			continue;
 		}
-		for (const selector of [".item-buttons", "[data-action='toggleEquipItem']", ".mist-wear", ".roll-img"]) {
+		// A usable one keeps its dice: clicking its picture uses it, and that identifies it. Its action buttons would name
+		// what it does.
+		const hide = [".item-buttons", "[data-action='toggleEquipItem']", ".mist-wear"];
+		if (!usable) {
+			hide.push(".roll-img");
+		}
+		for (const selector of hide) {
 			row.querySelectorAll(selector).forEach(control => control.remove());
 		}
 	}

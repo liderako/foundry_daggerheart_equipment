@@ -47,6 +47,10 @@
 		"RealItem": "Real item (only you see this)",
 		"Identified": "{shown} is identified: {name}.",
 		"CannotEquipUnidentified": "{name} is not identified yet: the GM must identify it before it can be equipped.",
-		"CannotUseUnidentified": "{name} is not identified yet: it cannot be used until the GM identifies it."
+		"CannotUseUnidentified": "{name} is not identified yet: it cannot be used until the GM identifies it.",
+		"UsableUnidentifiedEnable": "Can be used unidentified",
+		"UsableUnidentifiedEnableHint": "A player may use it without knowing what it is, such as drinking a potion of unknown effect. Using it identifies it: its name, description and effects come back, and it works. On by default for consumables.",
+		"UsableUnidentifiedHint": "Not identified yet: you can use it without knowing what it does, and then you will learn what it was.",
+		"UsedUnidentified": "{shown} turns out to be {name}."
 	}
 }

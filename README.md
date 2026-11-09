@@ -82,6 +82,8 @@ Players also cannot open it (its sheet shows only its picture, its name and that
 
 **The GM reads the real item in the Mystery block** on its Settings tab: its real name, picture and description with features, which only the GM sees. In the inventory row the GM's **Unidentified** tag names the real item in its tooltip. Saving the sheet never writes the name and picture it goes by over the real ones.
 
+**Usable unidentified:** **Can be used unidentified** in the Mystery block is ticked by default on consumables (potions) and can be ticked on anything else, and a player may use the item without knowing what it is, such as drinking a potion of unknown effect. Its row keeps the dice on its picture (not its action buttons, which would name what it does); clicking it identifies the item first, so its actions run and its effects work, and tells the player what it turned out to be. Sending it to chat stays closed. Stored in `flags.mist-age-equipment.mystery.usable`.
+
 **Only the GM identifies it:** by clicking that tag, with the **Identify** button in the Mystery block, or by unticking Unidentified. Everything comes back at once: its name, picture, description, features, and its effects.
 
 ## Armor slots on every armor

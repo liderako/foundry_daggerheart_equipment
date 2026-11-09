@@ -101,6 +101,27 @@ assert.equal(notes.at(-1)[1], "Strange ring is not identified yet: it cannot be 
 asGM(true);
 assert.equal(await item("Ring of Flight", "loot", { unidentified: true }).use(), "used", "the GM can use it");
 
+// One the GM let be used unidentified (a potion brewed by chance): a player uses it, and that identifies it first, so its
+// actions run and its effects work.
+asGM(false);
+calls.length = 0;
+const potion = item("Potion of Sleep", "consumable", { unidentified: true, usable: true, name: "Murky potion" });
+assert.equal(M.isUsableUnidentified(potion), true);
+assert.equal(new ActiveEffect(potion).isSuppressed, true, "its effects wait until it is used");
+assert.equal(await potion.use(), "used", "a player can use it");
+assert.deepEqual(calls, ["use Potion of Sleep"]);
+assert.equal(M.isUnidentified(potion), false, "using it identified it");
+assert.equal(potion.name, "Potion of Sleep");
+assert.equal(new ActiveEffect(potion).isSuppressed, false, "its effects work");
+assert.deepEqual(notes.at(-1), ["info", "Murky potion turns out to be Potion of Sleep."]);
+const sealed = item("Potion of Sleep", "consumable", { unidentified: true, usable: true });
+assert.equal(M.isUsableUnidentified(item("Potion", "consumable", { unidentified: true })), true, "a consumable is usable by default");
+assert.equal(M.isUsableUnidentified(item("Potion", "consumable", { unidentified: true, usable: false })), false, "unless the GM unticked it");
+assert.equal(M.isUsableUnidentified(item("Ring", "loot", { unidentified: true })), false, "other items only when ticked");
+assert.equal(await sealed.toChat(), null, "it still cannot be sent to chat, which would name its actions");
+assert.equal(M.isUnidentified(sealed), true);
+calls.length = 0;
+
 // An identified item is as it is.
 asGM(false);
 const rope = item("Rope");
@@ -219,6 +240,12 @@ assert.ok(row(hidden.id).classList.contains("mist-unidentified"), "an unidentifi
 assert.ok(!row(rope.id).classList.contains("mist-unidentified"), "an identified row shows its price");
 renderActor([hidden, rope], list);
 assert.equal(row(hidden.id).querySelectorAll(".mist-mystery-tag").length, 1, "rendered again: one tag");
+const drink = item("Potion of Sleep", "consumable", { unidentified: true, usable: true, name: "Murky potion" });
+list = renderActor([drink], rows([drink.id]));
+assert.ok(row(drink.id).querySelector(".roll-img"), "a usable one keeps its dice, to be used");
+assert.equal(row(drink.id).querySelector(".item-buttons"), null, "but not its action buttons, which name what it does");
+assert.equal(row(drink.id).querySelector(".mist-mystery-tag").getAttribute("data-tooltip"), en.UsableUnidentifiedHint);
+list = renderActor([hidden, rope], rows([hidden.id, rope.id]));
 asGM(true);
 const gmHidden = item("Ring of Flight", "loot", { unidentified: true, name: "Strange ring" });
 list = renderActor([gmHidden], rows([gmHidden.id]));
